@@ -13,6 +13,7 @@
       box-shadow: 0 0 2px 4px rgba(0,0,0,0.3);
     }
     .tabs .tab-title{
+      position: relative;
       display: flex;
       font-size: 16px;
       color: #303030;
@@ -23,11 +24,18 @@
     .tabs .tab-item{
       margin-right: 20px;
       cursor: pointer;
-      margin-bottom: -2px;
+    }
+    .tabs .line{
+      position: absolute;
+      top: 100%;
+      transform: translateX(0);
+      width: 60px;
+      height: 2px;
+      background-color: #409eff;
+      transition: all .3s;
     }
     .tabs .tab-item.active{
       color: #409eff;
-      border-bottom: 2px solid #409eff;
     }
     
     .tabs .tab-panel{
@@ -49,6 +57,7 @@
         <span class="tab-item">管理配置</span>
         <span class="tab-item">角色管理</span>
         <span class="tab-item">定时任务补偿</span>
+        <span class="line"></span>
       </div>
       <div class="tab-content">
         <div class="tab-panel active">用户管理</div>
@@ -63,14 +72,21 @@
     const $$ = s => document.querySelectorAll(s)
 
     const $$tabItems = $$('.tabs .tab-item')
+    const $$panels = $$('.tabs .tab-panel')
+    const $line = $('.tabs .line')
+    $line.style.width = $$tabItems[0].offsetWidth + 'px'
+
     $$tabItems.forEach($tab =>{
       $tab.onclick = function(){
         $$tabItems.forEach($tab => $tab.classList.remove('active'))
         this.classList.add('active')
 
+        $line.style.width = this.offsetWidth + 'px'
+        $line.style.transform = `translateX(${this.offsetLeft}px)`
+
         let index = [...$$tabItems].indexOf(this)
-        $$('.tabs .tab-panel').forEach($span => $span.classList.remove('active'))
-        $$('.tabs .tab-panel')[index].classList.add('active')
+        $$panels.forEach($span => $span.classList.remove('active'))
+        $$panels[index].classList.add('active')
       }
     })
   </script>
